@@ -16,7 +16,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="kg_kubestatemetrics",
-    version="0.1.0",
+    version=__version__,
     author="Rangel Reale",
     author_email="rangelspam@gmail.com",
     description="KubraGen Builder: Kube State Metrics",
