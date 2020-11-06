@@ -25,6 +25,7 @@ setuptools.setup(
     url="https://github.com/RangelReale/kg_kubestatemetrics",
     packages=setuptools.find_packages(),
     install_requires=INSTALL_REQUIRES,
+    test_suite="kg_kubestatemetrics.tests",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
