@@ -1,4 +1,4 @@
-from typing import List, Optional, Sequence, Any
+from typing import Optional, Sequence
 
 from kubragen import KubraGen
 from kubragen.builder import Builder
@@ -7,6 +7,7 @@ from kubragen.exception import InvalidParamError, InvalidNameError
 from kubragen.helper import QuotedStr
 from kubragen.object import ObjectItem, Object
 from kubragen.types import TBuild, TBuildItem
+
 from .option import KubeStateMetricsOptions
 
 
@@ -72,14 +73,14 @@ class KubeStateMetricsBuilder(Builder):
 
     SOURCE_NAME = 'kg_kubestatemetrics'
 
-    BUILD_ACCESSCONTROL: TBuild = 'accesscontrol'
-    BUILD_SERVICE: TBuild = 'service'
+    BUILD_ACCESSCONTROL = TBuild('accesscontrol')
+    BUILD_SERVICE = TBuild('service')
 
-    BUILDITEM_SERVICE_ACCOUNT: TBuildItem = 'service-account'
-    BUILDITEM_CLUSTER_ROLE: TBuildItem = 'cluster-role'
-    BUILDITEM_CLUSTER_ROLE_BINDING: TBuildItem = 'cluster-role-binding'
-    BUILDITEM_DEPLOYMENT: TBuildItem = 'deployment'
-    BUILDITEM_SERVICE: TBuildItem = 'service'
+    BUILDITEM_SERVICE_ACCOUNT = TBuildItem('service-account')
+    BUILDITEM_CLUSTER_ROLE = TBuildItem('cluster-role')
+    BUILDITEM_CLUSTER_ROLE_BINDING = TBuildItem('cluster-role-binding')
+    BUILDITEM_DEPLOYMENT = TBuildItem('deployment')
+    BUILDITEM_SERVICE = TBuildItem('service')
 
     def __init__(self, kubragen: KubraGen, options: Optional[KubeStateMetricsOptions] = None):
         super().__init__(kubragen)
@@ -128,17 +129,17 @@ class KubeStateMetricsBuilder(Builder):
     def namespace(self):
         return self._namespace
 
-    def build_names(self) -> List[TBuild]:
+    def build_names(self) -> Sequence[TBuild]:
         return [self.BUILD_ACCESSCONTROL, self.BUILD_SERVICE]
 
-    def build_names_required(self) -> List[TBuild]:
+    def build_names_required(self) -> Sequence[TBuild]:
         ret = [self.BUILD_SERVICE]
         if self.option_get('config.authorization.serviceaccount_create') is not False or \
                 self.option_get('config.authorization.roles_create') is not False:
             ret.append(self.BUILD_ACCESSCONTROL)
         return ret
 
-    def builditem_names(self) -> List[TBuildItem]:
+    def builditem_names(self) -> Sequence[TBuildItem]:
         return [
             self.BUILDITEM_CLUSTER_ROLE,
             self.BUILDITEM_SERVICE_ACCOUNT,
@@ -147,7 +148,7 @@ class KubeStateMetricsBuilder(Builder):
             self.BUILDITEM_SERVICE,
         ]
 
-    def internal_build(self, buildname: TBuild) -> List[ObjectItem]:
+    def internal_build(self, buildname: TBuild) -> Sequence[ObjectItem]:
         if buildname == self.BUILD_ACCESSCONTROL:
             return self.internal_build_accesscontrol()
         elif buildname == self.BUILD_SERVICE:
@@ -155,7 +156,7 @@ class KubeStateMetricsBuilder(Builder):
         else:
             raise InvalidNameError('Invalid build name: "{}"'.format(buildname))
 
-    def internal_build_accesscontrol(self) -> List[ObjectItem]:
+    def internal_build_accesscontrol(self) -> Sequence[ObjectItem]:
         ret = []
 
         if self.option_get('config.authorization.serviceaccount_create') is not False:
@@ -284,7 +285,7 @@ class KubeStateMetricsBuilder(Builder):
 
         return ret
 
-    def internal_build_service(self) -> List[ObjectItem]:
+    def internal_build_service(self) -> Sequence[ObjectItem]:
         ret = [
             Object({
                 'apiVersion': 'apps/v1',
